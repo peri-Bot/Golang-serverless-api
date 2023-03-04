@@ -23,8 +23,25 @@ func GetUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dyn
 		result, err := user.FeatchUser(email,tableName,dynaClient)
 
 		if err != nil {
-			return apiResponse(http.StatusBadRequest, ErrorBody{aws.String(err.Error)})}
+			return apiResponse(http.StatusBadRequest, ErrorBody{
+				aws.String(err.Error()),
+			})
+		}
 	}
+	return apiResponse(http.StatusOK, result)
+}
+
+func GetUsers(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DnamoDBAPI)(
+	*events.APIGatewayProxyResponse, error
+)  {
+		result, err := user.FeatchUsers(tableName,dynaClient)
+
+		if err != nil {
+			return apiResponse(http.StatusBadRequest, ErrorBody{
+				aws.String(err.Error()),
+			})
+		}
+	
 	return apiResponse(http.StatusOK, result)
 }
 
