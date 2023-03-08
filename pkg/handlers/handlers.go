@@ -45,7 +45,16 @@ func GetUsers(req events.APIGatewayProxyRequest, tableName string, dynaClient dy
 	return apiResponse(http.StatusOK, result)
 }
 
-func CreateUser() {
+func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI)(
+	*events.APIGatewayProxyResponse, error,
+) {
+	result, err := user.CreateUser(req, tableName, dynaClient)
+	if err!=nil {
+		return apiResponse(http.StatusBadRequest, ErrorBody{
+			aws.String(err.Error()),
+		})
+	}
+	return apiResponse(http.StatusCreated, result)
 
 }
 
