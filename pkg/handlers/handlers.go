@@ -58,9 +58,19 @@ func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient 
 
 }
 
-func UpdateUser() {
-
+func UpdateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI)(
+	*events.APIGatewayProxyResponse, error,
+){
+	result, err := user.UpdateUser(req, tableName, dynaClient)
+	if err!= nil {
+		return apiResponse(http.StatusBadRequest, ErrorBody{
+			aws.String(err.Error()),
+		})
+	}
+	return apiResponse(http.StatusOK, result)
 }
+
+
 
 func DeleteUser() {
 
