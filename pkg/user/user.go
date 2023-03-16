@@ -89,6 +89,20 @@ func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient 
 
 	av, err := dynamodbattribute.MarshalMap(u)
 
+	if err != nil {
+		return nil, errors.New(ErrorCouldNotMarshalItem)
+	}
+
+	input := &dynamodb.PutItemInput{
+		Item:      av,
+		TableName: aws.String(tableName),
+	}
+
+	_, err = dynaClient.PutItem(input)
+	if err != nil {
+		return nil, errors.New(ErrorCouldNotDynamoPutItem)
+	}
+	return &u, nil
 }
 
 func UpdateUser() {
